@@ -1,0 +1,43 @@
+SRT Relay Server (Ubuntu Server/ Raspberry Pi)
+y : srt-live-transmit "srt://:9000?mode=listener&latency=300" "srt://:9001?mode=listener&latency=300"
+
+
+Encoder
+ffmpeg -stream_loop -1 -re -i Re.mp3 -acodec libmp3lame -ar 44100 -ac 2 -b:a 128k -f mpegts "srt://43.133.121.235:9000?mode=caller&latency=300"
+ffmpeg -stream_loop -1 -re -i Re.mp3 -acodec aac -profile:a aac_low -ar 44100 -ac 2 -b:a 128k -f mpegts "srt://43.133.121.235:9000?mode=caller&latency=300"
+
+
+======= Best for Studio Link =============
+ffmpeg -stream_loop -1 -re -i Re.mp3 \
+-acodec aac -profile:a aac_low -ar 48000 -ac 2 -b:a 256k \
+-f mpegts "srt://43.133.121.235:9000?mode=caller&latency=300&pkt_size=1316&maxbw=0&rcvbuf=10000000&sndbuf=10000000"
+==========================================
+
+
+
+Y: ffmpeg -stream_loop -1 -re -i Re.mp3 -acodec libmp3lame -ar 44100 -ac 2 -b:a 128k -f mpegts "srt://159.138.230.150:9002?mode=caller&latency=300"
+Y: ffmpeg -i $(yt-dlp -f bestaudio -g "https://www.youtube.com/watch?v=o3iQ-y_JY8c") -acodec libmp3lame -ar 44100 -ac 2 -b:a 128k -f mpegts "srt://159.138.230.150:9000?mode=caller&latency=300"
+Y: ffmpeg -f alsa -i hw:3,0   -acodec libmp3lame -ar 44100 -ac 2 -b:a 128k   -f mpegts "srt://159.138.230.150:9000?mode=caller&latency=300"
+Y: ffmpeg -f alsa -i hw:3,0   -c:a aac -b:a 128k -ar 44100 -ac 2   -f mpegts "srt://159.138.230.150:9000?mode=caller&latency=300"
+Y: ffmpeg -f alsa -i hw:3,0 -c:a libopus -b:a 96k -ar 48000 -ac 2 -f matroska "srt://:9000?mode=caller&latency=300" (ใช้กับ SRT Relay Server บน Raspberry Pi ได้ / ffplay บน Windows  ไม่ได้ /  ffplay บน  Raspberry Pi ยังไม่ลอง )
+
+
+
+Player
+Y : ffplay -fflags nobuffer -flags low_delay "srt://43.133.121.235:9001?mode=caller&latency=300"
+Y : ffplay "srt://43.133.121.235:9001?mode=caller&latency=300"
+
+ffplay -fflags nobuffer -flags low_delay "srt://43.133.121.235:9001?mode=caller&latency=300"
+
+
+
+Cloud ใหม่
+ssh port 8022
+1. Web3testing [43.133.106.129]
+root  Mc0t@dmin123
+2. RadioSTL1.mcot.net  [43.133.121.235]
+root #@rAdio32
+3. RadioSTL2.mcot.net [43.133.105.91]
+root #@rAdio32
+4. RadioSTL3.mcot.net [43.133.118.207]
+root #@rAdio32

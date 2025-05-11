@@ -1,0 +1,3 @@
+#! sender.sh
+ffmpeg -f alsa -i hw:1 -acodec libmp3lame -ar 44100 -ac 2 -b:a 128k -f mpegts - | \
+srt-live-transmit - "srt://159.138.230.150:9000?mode=caller&latency=120" &
